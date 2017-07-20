@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %} Login {% endblock %}
+{% block content %}
+
+      <form method="POST" action="/login">
+        <div class="container">
+        <h2>Login</h2>
+        {{ form.hidden_tag() }}
+
+        {% for message in get_flashed_messages() %}
+            <p class="error-message">{{ message }}</p>
+        {% endfor %}
+        <div class="col-xs-5" style="margin-right: 100px;">
+          {{ form.email.label }}
+          {% if form.email.errors %}
+            {% for error in form.email.errors %}
+              <p class="has-error">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+          {{ form.email(class="form-control") }}
+        </div>
+        <div class="col-xs-5" style="margin-right: 100px;">
+          {{ form.password.label }}
+          {% if form.password.errors %}
+            {% for error in form.password.errors %}
+              <p class="error-message">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+          {{ form.password(class="form-control") }}
+        </div>
+        <div class="checkbox" style="position: relative;top: -10;top: 130px;right: 580px;">
+          {{ form.remember_me.label }}
+          {{ form.remember_me }}
+        </div>
+
+        {{ form.submit(class="btn btn-lg btn-blue", style="margin-top: 45px;margin-right: 600px;margin-left: 15px;") }}
+    </div>
+    </form>
+{% endblock %}
