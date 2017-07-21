@@ -1587,6 +1587,7 @@ pre code {
   margin-right: auto;
   margin-left: auto;
 }
+
 @media (min-width: 768px) {
   .container {
     width: 750px;
@@ -2638,6 +2639,21 @@ input[type="search"] {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.checkbox-login {
+
+  width: 340px;
+}
+
+.checkbox-login label {
+  min-height: 20px;
+  padding-left: 20px;
+  margin-bottom: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+
 .radio label,
 .checkbox label {
   min-height: 20px;

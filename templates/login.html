@@ -11,7 +11,7 @@
         {% for message in get_flashed_messages() %}
             <p class="error-message">{{ message }}</p>
         {% endfor %}
-        <div class="col-xs-5" style="margin-right: 100px;">
+        <div class="col-xs-5" style="margin-right: 800px;">
           {{ form.email.label }}
           {% if form.email.errors %}
             {% for error in form.email.errors %}
@@ -20,7 +20,7 @@
           {% endif %}
           {{ form.email(class="form-control") }}
         </div>
-        <div class="col-xs-5" style="margin-right: 100px;">
+        <div class="col-xs-5" style="margin-right: 800px;">
           {{ form.password.label }}
           {% if form.password.errors %}
             {% for error in form.password.errors %}
@@ -29,12 +29,12 @@
           {% endif %}
           {{ form.password(class="form-control") }}
         </div>
-        <div class="checkbox" style="position: relative;top: -10;top: 130px;right: 580px;">
-          {{ form.remember_me.label }}
+        <div class="checkbox-inline" style="margin-left: 15px;margin-right: 310px;margin-top: 15px;">
           {{ form.remember_me }}
+          {{ form.remember_me.label }}
         </div>
 
-        {{ form.submit(class="btn btn-lg btn-blue", style="margin-top: 45px;margin-right: 600px;margin-left: 15px;") }}
+        {{ form.submit(class="btn btn-lg btn-blue", style="margin-top: 15px;margin-right: 600px;margin-left: 15px;") }}
     </div>
     </form>
 {% endblock %}
