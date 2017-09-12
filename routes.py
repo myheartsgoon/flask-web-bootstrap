@@ -11,7 +11,6 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
-
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -60,7 +59,7 @@ def signup():
             db.session.commit()
             token = newuser.generate_confirmation_token()
             send_mail(newuser.email, token)
-            return redirect(url_for('home'))
+            return redirect(url_for('index'))
     elif request.method == 'GET':
         return render_template("signup.html", form=form)
 
