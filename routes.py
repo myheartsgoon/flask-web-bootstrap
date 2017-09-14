@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, flash, g
 from models import db, User
 from forms import SignupForm, LoginForm, AddressForm
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
@@ -9,7 +9,8 @@ import os
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:62171175110@localhost/flask_web"
 
 db.init_app(app)
 login_manager = LoginManager()
@@ -20,6 +21,7 @@ login_manager.init_app(app)
 
 @app.before_request
 def make_session_permant():
+    g.next = None
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5)
 
@@ -58,8 +60,8 @@ def signup():
             db.session.add(newuser)
             db.session.commit()
             token = newuser.generate_confirmation_token()
-            send_mail(newuser.email, token)
-            return redirect(url_for('index'))
+            send_mail(newuser.email, newuser.firstname, token)
+            return render_template('confirm.html', user=newuser.firstname)
     elif request.method == 'GET':
         return render_template("signup.html", form=form)
 
@@ -67,12 +69,13 @@ def signup():
 @login_required
 def confirm(token):
     if current_user.confirmed:
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
     if current_user.confirm(token):
         flash('You have confirmed your account. Thanks!')
+        return render_template('welcome.html')
     else:
         flash('The confirmation link is invalid or has expired.')
-    return redirect(url_for('home'))
+    return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -89,11 +92,12 @@ def login():
             user = User.query.filter_by(email=email).first()
             if user is not None and user.check_password(password):
                 login_user(user, form.remember_me.data)
-                return redirect(url_for('home'))
+                return redirect(session['next'] or url_for('home'))
             else:
                 flash('Email address or password incorrect!')
                 return render_template('login.html', form=form)
     elif request.method == 'GET':
+        session['next'] = request.args.get('next')
         return render_template('login.html', form=form)
 
 @app.route('/logout')
@@ -123,4 +127,4 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', port=5000)
+    app.run('0.0.0.0', port=5000,debug=True)
